@@ -22,6 +22,9 @@ const getTrackList = () => {
     }
 
     https.get(options,  (res) => {
+      if(res.statusCode != 200) {
+        return
+      }
       let buffer = ''
       res.on('data', (d) => {
         buffer += d
@@ -33,16 +36,19 @@ const getTrackList = () => {
           return `${track['artists'][0]['name']} ${track['name']}`
         }))
       })
+    }).on('error', (e) => {
+      reject(e)
     })
   })
 }
 
 const getYoutubeUrl = (trackTag) => {
   return new Promise((resolve, reject) => {
+    const searchLive = trackTag.match(/live/) ? '' : '-live'
     const options = {
         hostname: 'www.youtube.com',
         port: 443,
-        path: `/results?search_query=${encodeURIComponent(trackTag)}%2C+hd`,
+        path: `/results?search_query=${encodeURIComponent(trackTag)}+official+${searchLive}&sp=EgQQASAB`,
         method: 'GET'
     }
 
@@ -52,8 +58,16 @@ const getYoutubeUrl = (trackTag) => {
         buffer += d
       })
       res.on('end', () => {
-        resolve(buffer.match(/href=\"\/watch\?v=(.*?)\"/)[1])
+        const match = buffer.match(/href=\"\/watch\?v=(.*?)\"/)
+        if(match) {
+          resolve(match[1])
+        } {
+          reject('nothing found for ' + trackTag)
+        }
+
       })
+    }).on('error', (e) => {
+      reject(e)
     })
   })
 }

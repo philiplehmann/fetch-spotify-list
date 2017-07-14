@@ -1,7 +1,7 @@
 fetch-spotify-list
 ==================
 
-fetch a playlist form spotify and download youtube clips as mp3
+fetch a playlist from spotify and download youtube clips as mp3
 
 ajust the props token, playlist and user in the script
 
