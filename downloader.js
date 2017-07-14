@@ -2,7 +2,6 @@ const https = require('https')
 const { spawn } = require('child_process')
 
 // get list of playlists: https://developer.spotify.com/web-api/console/get-playlist/
-// needs https://rg3.github.io/youtube-dl/ in path
 const token = '<your-token>'
 const playlist = '<your-playlist>'
 const user = '<your-user>'
@@ -11,15 +10,15 @@ const getTrackList = () => {
   return new Promise((resolve, reject) => {
 
     const options = {
-        hostname: 'api.spotify.com',
-        port: 443,
-        path: `/v1/users/${user}/playlists/${playlist}?market=CH`,
-        method: 'GET',
-        headers:{
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-       }
+      hostname: 'api.spotify.com',
+      port: 443,
+      path: `/v1/users/${user}/playlists/${playlist}?market=CH`,
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
     }
 
     https.get(options,  (res) => {
